@@ -1,6 +1,5 @@
 use std::fmt::Debug;
 use std::fmt::{Formatter, Result};
-use crate::{NX, NY /*HTC, FuelCell, CP_H2O */};
 
 pub struct Mesh {
     pub x: Vec<f64>,
@@ -8,9 +7,60 @@ pub struct Mesh {
     pub idx: Vec<usize>,
 }
 
+pub struct DiscretizationProperties {
+    nx: usize,
+    ny: usize,
+    pub x_dim: f64,
+    pub y_dim: f64,
+    pub area_i: f64
+}
+
 pub enum MeshingError {
     NotEnoughtXNodes,
     NotEnoughtYNodes,
+}
+
+impl Mesh {
+    /// Set the physical location and index of the mesh
+    pub fn mesh_gen(prop: DiscretizationProperties) -> Self {
+
+        // let temp_air_in = 65.;
+
+        let dx = prop.x_dim / (prop.nx as f64 - 1.);
+        let dy = prop.y_dim / (prop.nx as f64 - 1.);
+
+        // Define the spatial field
+        let mut x: Vec<f64> = Vec::new();
+        let mut y: Vec<f64> = Vec::new();
+        let mut idx: Vec<usize> = Vec::new();
+
+        // Define value of the space
+        for x_idx in 0..prop.nx {
+            for y_idx in 0..prop.ny {
+                let index = x_idx * prop.nx + y_idx;
+                idx.push(index);
+                x.push(x_idx as f64 * dx);
+                y.push(y_idx as f64 * dy);
+            }
+        }
+
+        Self {x, y, idx }
+    }
+    
+    /// Parsing mesh to get values to feed on equations
+    pub fn get_discretization_intruction(nx : usize, ny: usize, x_dim: f64, y_dim: f64) -> DiscretizationProperties {
+        let nodes = nx * ny;
+        let area = x_dim * y_dim;
+        let area_i = area / nodes as f64;
+        
+        DiscretizationProperties {
+            nx,
+            ny,
+            x_dim,
+            y_dim,
+            area_i 
+        }
+    }
 }
 
 // Implementationof the debug trait to display the struct correctly and in a mainingfull way
@@ -36,44 +86,20 @@ index[0] = {}  ...  index[{}] = {} \n
     }
 }
 
-impl Mesh {
-    pub fn mesh_gen(x_dim: f64, y_dim: f64) -> Self {
-        // let temp_air_in = 65.;
-        let nx: usize = NX;
-        let ny: usize = NY;
-        let dx = x_dim / (nx as f64 - 1.);
-        let dy = y_dim / (nx as f64 - 1.);
-
-        // Define the spatial field
-        let mut x: Vec<f64> = Vec::new();
-        let mut y: Vec<f64> = Vec::new();
-        let mut idx: Vec<usize> = Vec::new();
-
-        // Define value of the space
-        for x_idx in 0..nx {
-            for y_idx in 0..ny {
-                let index = y_idx + x_idx * nx;
-                idx.push(index);
-                x.push(x_idx as f64 * dx);
-                y.push(y_idx as f64 * dy);
-            }
-        }
-
-        Self { x, y, idx }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn mesh_dimension_check() {
         // v3 series dimension
+        use crate::constants::{NX, NY};
+
         let x_dim = 2.04E-01;
         let y_dim = 1.44E-01;
-        let domain = Mesh::mesh_gen(x_dim, y_dim);
+        let prop: DiscretizationProperties = Mesh::get_discretization_intruction(NX, NY, x_dim, y_dim);
+        let domain = Mesh::mesh_gen(prop);
         assert_eq!(domain.idx[0], 0);
-        assert_eq!(domain.x[1], 4.08E-2);
-        assert_eq!(domain.y[2], 5.76E-2);
+        assert_eq!(domain.x[NX], 5.1E-2);
+        assert_eq!(domain.y[1], 3.6E-2);
     }
 }

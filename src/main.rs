@@ -2,16 +2,43 @@
 // use plot::plot_gen;
 
 mod mesh;
-use mesh::Mesh;
+use mesh::{Mesh, DiscretizationProperties};
+
+mod field_equations;
+use field_equations::Field;
 
 mod constants;
+// mesh constants
 use constants::{NX, NY};
+use constants::{HTC_H20_PCB, HTC_AIR_PCB, W, k};
+
+struct PhysicalValues {
+    q_i: f64, // heat flux [ W/m^2]
+    htc_h20: f64,
+    htc_air: f64,
+
+}
+
+impl PhysicalValues {
+    fn new(heat: f64, htc_h20_pcb: f64, htc_air_pcb: f64, discr: DiscretizationProperties) -> PhysicalValues {
+        let q_i = heat / discr.area_i;
+        PhysicalValues {
+            q_i,
+            htc_h20: htc_h20_pcb,
+            htc_air: htc_air_pcb,
+        }
+}
 
 fn main() {
-    let mesh = Mesh::mesh_gen(5., 5.);
+    let discretization = Mesh::get_discretization_intruction(NX, NY, 2.04E-01, 1.44E-01);
+    
+    // Mesh genration
+    let mesh = Mesh::mesh_gen(discretization);
+    let physics_variables = PhysicalValues::new(W, HTC_H20_PCB, HTC_AIR_PCB, discretization);
+
+
+
     println!("{:?}", mesh);
-    println!("{}   {}", mesh.x[13], mesh.y[13]);
-    // plot_gen();
 }
 
 // D=0.1; %diametro condotto in m

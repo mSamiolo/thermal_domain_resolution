@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'thermal_domain_resolution'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=thermal_domain_resolution",
+                    "--package=thermal_domain_resolution"
+                ],
+                "filter": {
+                    "name": "thermal_domain_resolution",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'thermal_domain_resolution'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=thermal_domain_resolution",
+                    "--package=thermal_domain_resolution"
+                ],
+                "filter": {
+                    "name": "thermal_domain_resolution",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
