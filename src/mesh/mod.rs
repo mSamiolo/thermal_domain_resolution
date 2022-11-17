@@ -22,7 +22,7 @@ pub enum MeshingError {
 
 impl Mesh {
     /// Set the physical location and index of the mesh
-    pub fn mesh_gen(prop: DiscretizationProperties) -> Self {
+    pub fn mesh_gen(prop: &DiscretizationProperties) -> Self {
 
         // let temp_air_in = 65.;
 
@@ -97,7 +97,7 @@ mod tests {
         let x_dim = 2.04E-01;
         let y_dim = 1.44E-01;
         let prop: DiscretizationProperties = Mesh::get_discretization_intruction(NX, NY, x_dim, y_dim);
-        let domain = Mesh::mesh_gen(prop);
+        let domain = Mesh::mesh_gen(&prop);
         assert_eq!(domain.idx[0], 0);
         assert_eq!(domain.x[NX], 5.1E-2);
         assert_eq!(domain.y[1], 3.6E-2);
