@@ -10,18 +10,20 @@ mod field_equations;
 mod constants;
 // mesh constants
 use constants::{NX, NY};
-use constants::{HTC_H20_PCB, HTC_AIR_PCB, W, K};
+use constants::{HTC_H20_PCB, HTC_AIR_PCB, W};
+
+#[derive(Clone, Copy)]
+/// Define the dimensionality of the problem
 
 struct PhysicalValues {
     q_i: f64, // heat flux [ W/m^2]
     htc_h20: f64,
     htc_air: f64,
-
 }
 
 impl PhysicalValues {
     fn new(heat: f64, htc_h20_pcb: f64, htc_air_pcb: f64, discr: &DiscretizationProperties) -> PhysicalValues {
-        let q_i = heat / discr.area_i;
+        let q_i = heat / discr.discrete_dimension;
         PhysicalValues {
             q_i,
             htc_h20: htc_h20_pcb,
@@ -31,12 +33,13 @@ impl PhysicalValues {
 }
 
 fn main() {
-    let discretization = Mesh::get_discretization_intruction(NX, NY, 2.04E-01, 1.44E-01);
-    
-    // Mesh genration
+    let discretization = Mesh::get_discretization_intruction_2D(NX, NY, 2.04E-01, 1.44E-01);
+
+    // Mesh generation
     let mesh = Mesh::mesh_gen(&discretization);
     let physics_variables = PhysicalValues::new(W, HTC_H20_PCB, HTC_AIR_PCB, &discretization);
 
+    // println!("{}", mesh.y[0])
     println!("{:?}", mesh);
 }
 

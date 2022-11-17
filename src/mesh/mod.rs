@@ -12,7 +12,8 @@ pub struct DiscretizationProperties {
     ny: usize,
     pub x_dim: f64,
     pub y_dim: f64,
-    pub area_i: f64
+    pub z_dim: f64,
+    pub discrete_dimension: f64
 }
 
 pub enum MeshingError {
@@ -46,45 +47,47 @@ impl Mesh {
 
         Self {x, y, idx }
     }
-    
+
+
     /// Parsing mesh to get values to feed on equations
-    pub fn get_discretization_intruction(nx : usize, ny: usize, x_dim: f64, y_dim: f64) -> DiscretizationProperties {
+    pub fn get_discretization_intruction_2D(nx : usize, ny: usize, x_dim: f64, y_dim: f64) -> DiscretizationProperties {
         let nodes = nx * ny;
         let area = x_dim * y_dim;
         let area_i = area / nodes as f64;
-        
+
         DiscretizationProperties {
             nx,
             ny,
             x_dim,
             y_dim,
-            area_i 
+            z_dim: 0.,
+            discrete_dimension: area_i
         }
     }
 }
 
-// Implementationof the debug trait to display the struct correctly and in a mainingfull way
+// Implementation of the debug trait to display the struct correctly and in a mainingfull way
 impl Debug for Mesh {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(
-            f,
-            "The mesh contains {} nodes, with coord:\n
+                write!( f,
+                "The mesh contains {} nodes, with coord:\n
 index[0] = {}  ...  index[{}] = {} \n
     x[0] = {}m ...   x[{}] = {}m  \n
     y[0] = {}m ...   y[{}] = {}m  \n ",
-            self.x.len(),
-            self.idx[0],
-            self.idx.len() - 1,
-            self.idx.last().unwrap(),
-            self.x[0],
-            self.x.len() - 1,
-            self.x.last().unwrap(),
-            self.y[0],
-            self.y.len() - 1,
-            self.y.last().unwrap()
-        )
+                self.x.len(),
+                self.idx[0],
+                self.idx.len() - 1,
+                self.idx.last().unwrap(),
+                self.x[0],
+                self.x.len() - 1,
+                self.x.last().unwrap(),
+                self.y[0],
+                self.y.len() - 1,
+                self.y.last().unwrap()
+            )
+        }
     }
-}
+
 
 #[cfg(test)]
 mod tests {
@@ -96,7 +99,7 @@ mod tests {
 
         let x_dim = 2.04E-01;
         let y_dim = 1.44E-01;
-        let prop: DiscretizationProperties = Mesh::get_discretization_intruction(NX, NY, x_dim, y_dim);
+        let prop: DiscretizationProperties = Mesh::get_discretization_intruction_2D(NX, NY, x_dim, y_dim);
         let domain = Mesh::mesh_gen(&prop);
         assert_eq!(domain.idx[0], 0);
         assert_eq!(domain.x[NX], 5.1E-2);
