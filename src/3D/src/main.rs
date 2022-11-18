@@ -14,7 +14,7 @@ use constants::{HTC_H20_PCB, HTC_AIR_PCB, W};
 
 #[derive(Clone, Copy)]
 /// Define the dimensionality of the problem
-
+#[allow(unused)]
 struct PhysicalValues {
     q_i: f64, // heat flux [ W/m^2]
     htc_h20: f64,

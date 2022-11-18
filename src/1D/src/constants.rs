@@ -36,4 +36,5 @@ pub const U: f64 = 5.0;
 pub const V: f64 = 5.0;
 
 
-
+// Geometric conditions
+pub const PCB_CORE: f64 = 0.65E-03; 

@@ -1,7 +1,19 @@
+mod mesh;
+use mesh::{DiscretizationProperties, Mesh};
 
+mod constants;
+use constants::{NX, PCB_CORE};
+
+mod solver;
+use solver::{thermal_solver, matrix_a};
 
 fn main() {
+    let discr_instructions = DiscretizationProperties::get_discretization_intructions(NX, PCB_CORE);
+    let mesh = Mesh::mesh_gen(&discr_instructions);
 
+
+    let temperature = thermal_solver(&mesh);
+    let m = matrix_a(&mesh, &discr_instructions);
 }
 
 // D=0.1; %diametro condotto in m

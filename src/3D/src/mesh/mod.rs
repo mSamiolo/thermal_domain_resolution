@@ -1,19 +1,18 @@
 use std::fmt::Debug;
 use std::fmt::{Formatter, Result};
 
-pub struct Mesh {
-    pub x: Vec<f64>,
-    pub y: Vec<f64>,
-    pub idx: Vec<usize>,
-}
-
 pub struct DiscretizationProperties {
     nx: usize,
     ny: usize,
     pub x_dim: f64,
     pub y_dim: f64,
-    pub z_dim: f64,
     pub discrete_dimension: f64
+}
+
+pub struct Mesh {
+    pub x: Vec<f64>,
+    pub y: Vec<f64>,
+    pub idx: Vec<usize>,
 }
 
 pub enum MeshingError {
@@ -60,7 +59,6 @@ impl Mesh {
             ny,
             x_dim,
             y_dim,
-            z_dim: 0.,
             discrete_dimension: area_i
         }
     }
