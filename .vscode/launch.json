@@ -7,15 +7,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'thermal_domain_resolution'",
+            "name": "Debug executable 'thermal_domain_resolution_1D'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=thermal_domain_resolution",
-                    "--package=thermal_domain_resolution"
+                    "--bin=thermal_domain_resolution_1D",
+                    "--package=thermal_domain_resolution_1D"
                 ],
                 "filter": {
-                    "name": "thermal_domain_resolution",
+                    "name": "thermal_domain_resolution_1D",
                     "kind": "bin"
                 }
             },
@@ -25,16 +25,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'thermal_domain_resolution'",
+            "name": "Debug unit tests in executable 'thermal_domain_resolution_1D'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=thermal_domain_resolution",
-                    "--package=thermal_domain_resolution"
+                    "--bin=thermal_domain_resolution_1D",
+                    "--package=thermal_domain_resolution_1D"
                 ],
                 "filter": {
-                    "name": "thermal_domain_resolution",
+                    "name": "thermal_domain_resolution_1D",
                     "kind": "bin"
                 }
             },
